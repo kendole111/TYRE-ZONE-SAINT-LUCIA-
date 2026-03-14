@@ -1,0 +1,5 @@
+{
+  "name": "Tyre Zone Saint Lucia -2",
+  "description": "A professional tire shop and vehicle service garage in La Clery, Saint Lucia.",
+  "requestFramePermissions": ["microphone"]
+}
