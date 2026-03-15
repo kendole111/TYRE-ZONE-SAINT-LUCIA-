@@ -43,12 +43,16 @@ export default function Inventory() {
               viewport={{ once: true }}
               className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 group"
             >
-              <div className="aspect-video relative overflow-hidden">
+              <div className="aspect-video relative overflow-hidden bg-black">
                 <video 
                   src={item.src} 
                   controls 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                >
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-2">{item.title}</h3>

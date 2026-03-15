@@ -33,16 +33,22 @@ export default function Reviews() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !comment) return;
+    setFormError(null);
+
+    if (!name.trim() || !comment.trim()) {
+      setFormError("Please fill in both your name and your experience.");
+      return;
+    }
 
     const newReview: Review = {
       id: Date.now(),
-      name,
+      name: name.trim(),
       rating,
-      comment,
+      comment: comment.trim(),
       date: new Date().toISOString().split('T')[0]
     };
 
@@ -52,7 +58,7 @@ export default function Reviews() {
     setRating(5);
     setSubmitted(true);
     
-    setTimeout(() => setSubmitted(false), 3000);
+    setTimeout(() => setSubmitted(false), 5000);
   };
 
   return (
@@ -86,10 +92,12 @@ export default function Reviews() {
                   <input 
                     type="text" 
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (formError) setFormError(null);
+                    }}
                     placeholder="Enter your name"
                     className="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 pl-10 pr-4 outline-none focus:border-red-600 transition"
-                    required
                   />
                 </div>
               </div>
@@ -101,7 +109,7 @@ export default function Reviews() {
                       key={star}
                       type="button"
                       onClick={() => setRating(star)}
-                      className="focus:outline-none"
+                      className="focus:outline-none hover:scale-110 transition-transform"
                     >
                       <Star 
                         size={28} 
@@ -117,18 +125,29 @@ export default function Reviews() {
               <label className="block text-sm font-bold uppercase text-gray-400 mb-2">Your Experience</label>
               <textarea 
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e) => {
+                  setComment(e.target.value);
+                  if (formError) setFormError(null);
+                }}
                 placeholder="Tell us about your visit..."
                 rows={4}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 outline-none focus:border-red-600 transition resize-none"
-                required
               ></textarea>
             </div>
 
+            {formError && (
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-red-500 text-sm font-bold"
+              >
+                {formError}
+              </motion.p>
+            )}
+
             <button 
               type="submit"
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 uppercase tracking-widest disabled:opacity-50"
-              disabled={!name || !comment}
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-widest"
             >
               <Send size={18} />
               Submit Review
